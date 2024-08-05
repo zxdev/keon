@@ -69,7 +69,7 @@ func NewKEON(n uint64) *KEON {
 // Info will read and return *KEON file header information.
 func Info(path string) (result struct {
 	Checksum, Count, Max, depth uint64
-	Valid, Ok                   bool
+	Ok                          bool
 }) {
 
 	f, err := os.Open(path)
