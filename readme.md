@@ -43,7 +43,7 @@ Scaling factor for go routine readers has been observed to approximately 1.5x pe
 
   t0 := time.Now()
   for i := uint64(0); i < size; i++ {
-    if !insert([]byte{byte(i % 255), byte(i % 26), byte(i % 235), byte(i % 254), byte(i % 249), byte(i % 197), byte(i % 17), byte(i % 99)}) {
+    if !insert([]byte{byte(i % 255), byte(i % 26), byte(i % 235), byte(i % 254), byte(i % 249), byte(i % 197), byte(i % 17), byte(i % 99)}).Ok {
       t.Log("insert failure", i)
       t.FailNow()
     }
@@ -52,7 +52,7 @@ Scaling factor for go routine readers has been observed to approximately 1.5x pe
 
   t0 = time.Now()
   for i := uint64(0); i < size; i++ {
-    if !lookup([]byte{byte(i % 255), byte(i % 26), byte(i % 235), byte(i % 254), byte(i % 249), byte(i % 197), byte(i % 17), byte(i % 99)}) {
+    if !lookup([]byte{byte(i % 255), byte(i % 26), byte(i % 235), byte(i % 254), byte(i % 249), byte(i % 197), byte(i % 17), byte(i % 99)}).OK {
       t.Log("lookup failure", i)
       t.FailNow()
     }
