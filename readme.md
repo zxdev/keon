@@ -6,7 +6,7 @@ This follows a MRSW philosophy, so is always thread safe to read or write, but i
 
 A reference set may be saved or loaded, and a magic number is generated and compared to prove data integrity. Items may be removed from the set, however the desired container size is static once it has been created and can not be resized dynamically. If it must be resized, it but be rebuild as there is currently no key iterator to facilitate a resize operation since this is not currently a use case requirement.
 
-This architecture is a three bucket wide type of cookoo hash table with some additional performance enhancements, arraged logically like in a row/bucket pattern:
+This architecture is a three bucket wide type of cuckoo hash table with some additional performance enhancements, arraged logically like in a row/bucket pattern:
 
   key|key|key
   key|key|key

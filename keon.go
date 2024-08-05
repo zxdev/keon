@@ -78,7 +78,9 @@ func Info(path string) (result struct {
 		_, err = fmt.Fscanln(buf, &result.Checksum, &result.Count, &result.Max, &result.depth)
 		f.Close()
 	}
-	result.Ok = err == nil
+
+	// validate the keon is readable and the header is valid
+	result.Ok = err == nil && result.Checksum > 0 && result.Max > 0
 
 	return
 

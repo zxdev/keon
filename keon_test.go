@@ -37,7 +37,7 @@ func TestKEON(t *testing.T) {
 	t.Log("lookup", time.Since(t0))
 
 	t0 = time.Now()
-	t.Log("magic", time.Since(t0))
+	t.Log("timer", time.Since(t0))
 
 	t.Log("stats", kn.Len(), kn.Cap(), kn.Ratio())
 
@@ -71,18 +71,48 @@ func TestInfo(t *testing.T) {
 
 	t.Log("stats", kn.Len(), kn.Cap(), kn.Ratio())
 
-	kn.Write("keon")
-	kn = nil
+	kn.Write("sandbox/test.keon")
 
-	info := keon.Info("keon")
+	info := keon.Info("sandbox/test.keon")
 	t.Log(info.Checksum, info.Count, info.Max, info.Ok)
-	os.Remove("keon")
+	os.Remove("sandbox/test.keon")
+
+}
+
+func TestUpdater(t *testing.T) {
+
+	f1 := "sandbox/test1.keon"
+	f2 := "sandbox/test2.keon"
+
+	size := uint64(10000)
+
+	kn1 := keon.NewKEON(size)
+	insert1 := kn1.Insert()
+	for i := uint64(0); i < size; i++ {
+		if !insert1([]byte{byte(i % 255), byte(i % 26), byte(i % 235), byte(i % 254), byte(i % 249), byte(i % 197), byte(i % 17), byte(i % 99)}).Ok {
+			t.Log("insert failure", i)
+			t.FailNow()
+		}
+	}
+	t.Log("stats", kn1.Len(), kn1.Cap(), kn1.Ratio())
+	kn1.Write(f1) // checksum 4937243075915459616
+
+	kn2 := keon.NewKEON(size)
+	insert2 := kn2.Insert()
+	for i := uint64(0); i < size; i++ {
+		if !insert2([]byte{byte(i % 195), byte(i % 26), byte(i % 253), byte(i % 254), byte(i % 249), byte(i % 197), byte(i % 17), byte(i % 119)}).Ok {
+			t.Log("insert failure", i)
+			t.FailNow()
+		}
+	}
+	t.Log("stats", kn2.Len(), kn2.Cap(), kn2.Ratio())
+	kn2.Write(f2) // checksum 4927319418560608743
 
 }
 
 var fileDB = "keon.DB"
 
-func TestONE(t *testing.T) {
+func TestFileDB1(t *testing.T) {
 
 	file := "ddump1e6"
 	path := filepath.Join(os.Getenv("HOME"), "Development", "_data", file)
@@ -147,7 +177,7 @@ func TestONE(t *testing.T) {
 	t.Log("keon: save", time.Since(t0))
 }
 
-func TestTWO(t *testing.T) {
+func TestFileDB2(t *testing.T) {
 
 	file := "ddump1e6"
 	path := filepath.Join(os.Getenv("HOME"), "Development", "_data", file)
